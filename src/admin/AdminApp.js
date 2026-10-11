@@ -298,7 +298,7 @@ export default function AdminApp() {
       </main>
 
       <footer style={{ textAlign: "center", padding: "18px 20px", color: "rgba(255,255,255,0.9)", fontSize: 13 }}>
-        © {new Date().getFullYear()} Stacks Chat — Admin
+        © {new Date().getFullYear()} Dept Chat — Admin
       </footer>
 
       {/* Modal for credentials (only modal now) */}
