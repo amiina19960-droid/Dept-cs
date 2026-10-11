@@ -77,7 +77,7 @@ export default function AdminApp() {
   }, []);
 
   // Background image path (from public folder). Encode in case of spaces.
-  const backgroundImageUrl = encodeURI("/ChatGPT Image Dec 6, 2025, 06_09_52 AM.png");
+  const backgroundImageUrl = encodeURI("/Deptcs.png");
 
   // Primary login handler (modal)
   async function handleLogin(e) {
@@ -197,7 +197,7 @@ export default function AdminApp() {
             SC
           </div>
           <div>
-            <div style={{ fontWeight: 800, fontSize: 18 }}>Stacks Chat</div>
+            <div style={{ fontWeight: 800, fontSize: 18 }}>DEPT Chat</div>
             <div style={{ fontSize: 12, opacity: 0.95 }}>Admin Portal</div>
           </div>
         </div>
