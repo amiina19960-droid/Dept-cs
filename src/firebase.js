@@ -21,14 +21,14 @@ import { supabase } from "./supabaseClient";
 // 🔥 Firebase RTDB Setup (UPDATED)
 // -------------------------------------------------------
 const firebaseConfig = {
-  apiKey: "AIzaSyCl8oU-ivOVRczs-5-O_b3MWxp9-x135C8",
-  authDomain: "blitz-1a.firebaseapp.com",
-  projectId: "blitz-1a",
-  storageBucket: "blitz-1a.firebasestorage.app",
-  messagingSenderId: "413811280853",
-  appId: "1:413811280853:web:dd47f88ddbe70cd6e98b5c",
-  databaseURL: "https://blitz-1a-default-rtdb.firebaseio.com",
-  measurementId: "G-KF5F4WM6FB",
+  apiKey: "AIzaSyD97e8yAWdsL0AIdOqdeGKXkHChLma3Y7I",
+  authDomain: "dept-cee80.firebaseapp.com",
+  projectId: "dept-cee80",
+  storageBucket: "dept-cee80.firebasestorage.app",
+  messagingSenderId: "179396888092",
+  appId: "1:179396888092:web:8b0c23295dcc7eade801d9",
+  databaseURL: "https://dept-cee80-default-rtdb.firebaseio.com",
+  measurementId: "G-E5QLDRW82H",
 };
 
 const app = initializeApp(firebaseConfig);
