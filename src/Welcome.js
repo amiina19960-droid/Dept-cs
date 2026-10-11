@@ -48,12 +48,12 @@ export default function Welcome() {
       >
         <div className="profile">
           <img
-            src="/Digital Cs.png"
+            src="/Deptcs.png"
             alt="Stacks Logo"
             className="avatar"
           />
           <div className="profile-text">
-            <h4>DIGITAL-Blitz</h4>
+            <h4>DEPT</h4>
             <span>Customer Service</span>
           </div>
         </div>
