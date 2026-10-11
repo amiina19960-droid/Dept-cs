@@ -1,0 +1,730 @@
+/* ==========================================================
+Admin.css — Mint Gradient Theme (Based on your screenshot)
+Blue accent preserved (#1076D6)
+UPDATED: Compact persistent sidebar + user action UI (delete/block)
+========================================================== */
+
+:root{
+/* Backgrounds inspired by screenshot */
+--bg-0: linear-gradient(180deg, #eaf7ff 0%, #e8fdf5 100%);  /* main mint gradient */
+--bg-1: linear-gradient(180deg, #d7ecfa 0%, #e5f7fa 100%);  /* sidebar gradient */
+--panel: rgba(255,255,255,0.65);  /* frosted panel */
+--panel-solid: #ffffff;
+
+--muted: #6b7280;
+--text: #1a1a1a;
+
+/* Accent blue (unchanged) */
+--accent: #1076D6;
+--accent-600: #0c5ca7;
+
+--outgoing: #1076D6;
+--incoming: #ffffff;
+--incoming-contrast: #0c0f13;
+
+--radius-lg: 16px;
+--radius-md: 12px;
+--glass: rgba(255,255,255,0.35);
+
+--sidebar-width: 360px;
+--compact-sidebar: 72px;
+--gutter: 20px;
+}
+
+/* ---------- Global ---------- */
+
+* { box-sizing: border-box; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  html, body, #root { height: 100%; margin: 0; padding: 0; }
+
+body{
+font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+background: var(--bg-0);
+color: var(--text);
+line-height: 1.35;
+-webkit-text-size-adjust: 100%;
+-ms-text-size-adjust: 100%;
+}
+
+/* ---------- Layout root (grid) ---------- */
+.admin-container {
+display: grid;
+grid-template-columns: var(--sidebar-width) 1fr;
+min-height: 100vh;
+width: 100%;
+gap: 0;
+background: var(--bg-0);
+overflow: hidden;
+}
+
+/* main column (right) */
+.admin-main {
+display: flex;
+flex-direction: column;
+min-width: 0;
+background: transparent;
+}
+
+/* center/inner chat stage */
+.chat-stage {
+width: 100%;
+max-width: 1100px;
+margin: 0 auto;
+display: flex;
+flex-direction: column;
+height: 100vh;
+min-width: 0;
+padding: var(--gutter);
+}
+
+/* ---------- Left Sidebar ---------- */
+.admin-users{
+width: var(--sidebar-width);
+min-width: 220px;
+background: var(--bg-1);
+padding: 18px;
+overflow-y: auto;
+overflow-x: hidden;
+
+/* FROSTED SIDEBAR LIKE SCREENSHOT */
+backdrop-filter: blur(10px);
+border-right: 1px solid rgba(255,255,255,0.5);
+box-shadow: inset -2px 0 6px rgba(0,0,0,0.05);
+border-radius: 0 18px 18px 0;
+}
+
+/* scrollbar */
+.admin-users::-webkit-scrollbar,
+.adminchat-body::-webkit-scrollbar {
+width: 10px;
+height: 10px;
+}
+.admin-users::-webkit-scrollbar-thumb,
+.adminchat-body::-webkit-scrollbar-thumb {
+background: rgba(0,0,0,0.12);
+border-radius: 999px;
+}
+.admin-users::-webkit-scrollbar-track,
+.adminchat-body::-webkit-scrollbar-track {
+background: transparent;
+}
+
+.sidebar-header{
+padding-bottom:10px;
+margin-bottom:8px;
+border-bottom:1px solid rgba(0,0,0,0.06);
+}
+
+.admin-title, .sidebar-header h2{
+margin:0;
+font-size:18px;
+color:var(--text);
+font-weight:700;
+}
+
+/* MESSAGE LIST ITEMS */
+.user-list-item,
+.user-item{
+position: relative;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+padding:12px;
+border-radius:14px;
+background: rgba(255,255,255,0.4);
+backdrop-filter: blur(6px);
+transition: transform 0.12s ease, background 0.12s ease;
+cursor:pointer;
+min-width: 0;
+border:1px solid rgba(255,255,255,0.4);
+}
+
+.user-list-item:hover,
+.user-item:hover{
+background:rgba(255,255,255,0.7);
+transform: translateY(-3px);
+}
+
+.user-list-item.active,
+.user-item.active{
+background: rgba(255,255,255,0.95);
+border-left:4px solid var(--accent);
+padding-left:10px;
+}
+
+.user-left{ display:flex; align-items:center; gap:12px; min-width:0; flex:1; }
+
+.user-avatar{
+width:44px; height:44px; border-radius:50%;
+background:var(--accent);
+color:white; display:flex; align-items:center; justify-content:center;
+font-weight:700; font-size:16px; flex:0 0 44px;
+box-shadow: 0 6px 20px rgba(16,118,214,0.25);
+position:relative;
+flex-shrink: 0;
+}
+
+/* Compact avatar size when compact sidebar is active */
+.admin-users.compact .user-avatar {
+  width:44px; height:44px;
+}
+
+/* online dot */
+.user-avatar.online::after{
+content: "";
+position: absolute;
+width:10px; height:10px;
+border-radius:50%;
+background: #3ee07a;
+right: -2px;
+bottom: -2px;
+border: 2px solid white;
+box-shadow: 0 0 0 4px rgba(16,118,214,0.05);
+}
+
+.user-meta{ min-width:0; overflow:hidden; }
+.user-id{ font-weight:700; font-size:14px; color:var(--text); white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
+.last-msg{ font-size:13px; color:var(--muted); margin-top:6px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
+
+.user-right{ display:flex; align-items:flex-start; flex-direction:column; gap:6px; justify-content:center; flex:0 0 auto; }
+.time{ font-size:12px; color:var(--muted); }
+
+/* Action buttons container (delete/block, more) */
+.user-actions{
+display:flex;
+align-items:center;
+gap:8px;
+position: absolute;
+right: 12px;
+top: 50%;
+transform: translateY(-50%) translateX(6px);
+opacity: 0;
+pointer-events: none;
+transition: opacity 140ms ease, transform 140ms ease;
+}
+
+/* Buttons (icon style) */
+.user-actions button{
+background: transparent;
+border: none;
+padding: 6px;
+border-radius: 8px;
+cursor: pointer;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+color: var(--muted);
+transition: background 120ms ease, color 120ms ease;
+}
+.user-actions button:hover{
+background: rgba(0,0,0,0.06);
+color: var(--accent-600);
+}
+
+/* Show actions when hovering list item or when parent has a class 'show-actions' */
+.user-list-item:hover .user-actions,
+.user-list-item.show-actions .user-actions,
+.user-item:hover .user-actions,
+.user-item.show-actions .user-actions {
+opacity: 1;
+pointer-events: auto;
+transform: translateY(-50%) translateX(0);
+}
+
+/* Badged states (blocked) */
+.user-list-item.blocked,
+.user-item.blocked {
+opacity: 0.6;
+filter: grayscale(0.15);
+}
+.user-list-item.blocked .user-id,
+.user-item.blocked .last-msg { text-decoration: line-through; }
+
+/* compact mode: hide text, show only avatars and inline action icons */
+.admin-users.compact .user-meta,
+.admin-users.compact .user-right {
+  display: none;
+}
+
+/* ensure avatar stack layout in compact */
+.admin-users.compact .user-list-item,
+.admin-users.compact .user-item {
+  justify-content: center;
+  padding: 10px;
+  border-radius: 12px;
+  margin: 8px 6px;
+  width: calc(100% - 12px);
+}
+
+/* show actions as a small overlay underneath avatar in compact mode when hovered */
+.admin-users.compact .user-actions {
+  right: 50%;
+  transform: translateY(8px) translateX(50%);
+  top: auto;
+  bottom: -6px;
+  opacity: 0;
+  pointer-events: none;
+}
+.admin-users.compact .user-list-item:hover .user-actions {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) translateX(50%);
+}
+
+/* badge */
+.badge{
+background:var(--accent);
+color:white;
+min-width:22px; height:22px;
+display:inline-flex; align-items:center; justify-content:center;
+border-radius:999px; font-size:12px; padding:0 6px;
+box-shadow: 0 6px 18px rgba(16,118,214,0.18);
+}
+
+/* ---------- Main chat area ---------- */
+.admin-chat{
+flex:1;
+display:flex;
+flex-direction:column;
+background: var(--bg-0);
+min-width:0;
+overflow: hidden;
+border-radius:18px;
+backdrop-filter: blur(8px);
+}
+
+/* CHAT HEADER (white rounded bar like screenshot) */
+.adminchat-header{
+display:flex;
+gap:14px;
+align-items:center;
+padding:16px 20px;
+background: var(--panel);
+border-bottom:1px solid rgba(255,255,255,0.4);
+backdrop-filter: blur(12px);
+flex: 0 0 auto;
+border-radius:18px 18px 0 0;
+}
+
+.adminchat-header-avatar{
+width:48px; height:48px; border-radius:50%;
+background:var(--accent); color:#fff;
+display:flex;align-items:center;justify-content:center;font-weight:700;
+flex-shrink:0;
+}
+
+.adminchat-header-info{ display:flex; flex-direction:column; min-width:0; }
+.adminchat-header-name{ font-size:16px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.adminchat-header-status{ font-size:13px; color:var(--muted) }
+
+/* ---------- SCROLLABLE CHAT BODY ---------- */
+.adminchat-body{
+flex:1 1 auto;
+min-height:0;
+padding:18px 0;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:8px;
+scroll-behavior: smooth;
+overscroll-behavior: contain;
+}
+
+/* bubbles container */
+.messages-inner {
+width: 100%;
+max-width: 720px;
+margin: 0 auto;
+display:flex;
+flex-direction:column;
+gap:12px;
+padding: 8px 20px 24px 20px;
+min-height: 0;
+box-sizing: border-box;
+min-width: 0;
+}
+
+.bubble-wrapper {
+display:flex;
+align-items:flex-end;
+gap:8px;
+max-width:100%;
+width:100%;
+justify-content: flex-start;
+min-width: 0;
+overflow: visible;
+}
+
+/* admin/user alignments */
+.row-admin .bubble-wrapper {
+justify-content: flex-end;
+}
+.row-user .bubble-wrapper {
+justify-content: flex-start;
+}
+
+/* date separator */
+.date-sep{
+align-self:center;
+background: rgba(255,255,255,0.6);
+color:var(--muted);
+padding:6px 12px;
+border-radius:999px;
+font-size:13px;
+margin:18px 0;
+backdrop-filter: blur(4px);
+}
+
+/* ---------- Message rows ---------- */
+.row-admin, .admin-row, .msg-row.admin {
+display:flex; justify-content:flex-end; margin-bottom:12px; width:100%; min-width:0;
+}
+.row-user, .user-row, .msg-row.user {
+display:flex; justify-content:flex-start; margin-bottom:12px; width:100%; min-width:0;
+}
+
+/* ---------- Bubbles ---------- */
+.chat-bubble, .bubble-user, .bubble-admin, .bubble-left, .bubble-right, .wa-bubble {
+display:inline-block;
+padding:12px 16px;
+border-radius: var(--radius-lg);
+max-width:100%;
+word-break: break-word;
+box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+font-size:15px;
+line-height:1.4;
+min-width: 0;
+box-sizing: border-box;
+}
+
+.bubble-left {
+background: #ffffff;
+color: var(--text);
+}
+
+.bubble-right {
+background: var(--accent);
+color: white;
+}
+
+/* text */
+.bubble-text, .wa-text {
+color:inherit;
+font-size:15px;
+white-space:pre-wrap;
+max-width: 100%;
+word-break: break-word;
+}
+
+/* reply previews */
+.reply-box, .wa-reply-box {
+border-left:4px solid rgba(0,0,0,0.08);
+background: rgba(0,0,0,0.03);
+padding:8px 10px;
+margin-bottom:8px;
+border-radius:8px;
+color: var(--muted);
+overflow: hidden;
+}
+.reply-name, .wa-reply-name { font-weight:700; font-size:13px; color:var(--text); margin-bottom:4px; }
+.reply-snippet, .wa-reply-snippet { font-size:13px; color:var(--muted); }
+
+/* ---------- IMAGES ---------- */
+.bubble-img {
+max-width: 100%;
+height: auto;
+border-radius: 12px;
+display: block;
+margin-bottom: 8px;
+box-sizing: border-box;
+border: 3px solid rgba(16,118,214,0.12);
+object-fit: cover;
+cursor: pointer;
+}
+
+/* ---------- FILE BUBBLE ---------- */
+.bubble-file, .wa-file {
+background: rgba(255,255,255,0.6);
+padding:10px;
+border-radius:10px;
+display:flex;
+gap:10px;
+align-items:center;
+width: 100%;
+max-width: 520px;
+box-sizing: border-box;
+cursor: pointer;
+backdrop-filter: blur(6px);
+}
+.file-icon{ font-size:20px; flex-shrink: 0; }
+.file-name{ font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* footer */
+.bubble-footer, .wa-footer {
+display:flex;
+gap:8px;
+justify-content:flex-end;
+align-items:center;
+margin-top:8px;
+font-size:12px;
+color:var(--muted);
+}
+
+/* ---------- bubble menu ---------- */
+.bubble-menu {
+display: flex;
+align-items: center;
+height: 100%;
+flex-shrink: 0;
+}
+.bubble-menu > * {
+display: flex;
+}
+
+/* ---------- Input bar ---------- */
+.adminchat-inputbar{
+padding:12px 18px;
+border-top:1px solid rgba(255,255,255,0.4);
+background: var(--panel);
+display:flex; gap:12px; align-items:center;
+width: 100%;
+box-sizing: border-box;
+flex: 0 0 auto;
+backdrop-filter: blur(14px);
+border-radius:0 0 18px 18px;
+}
+
+.message-input{
+flex:1;
+padding:14px 16px;
+border-radius:20px;
+background: rgba(255,255,255,0.75);
+border:1px solid rgba(255,255,255,0.8);
+color:var(--text);
+font-size:15px;
+min-width: 0;
+}
+.message-input::placeholder{ color:rgba(0,0,0,0.35); }
+
+.file-btn{ color:var(--muted); font-size:20px; cursor:pointer; flex: 0 0 auto; }
+
+.send-btn{
+background:var(--accent);
+color:white; padding:10px 16px; border-radius:14px;
+border:none; cursor:pointer; font-weight:700;
+box-shadow: 0 8px 20px rgba(16,118,214,0.18);
+flex: 0 0 auto;
+}
+
+/* ---------- Empty state ---------- */
+.empty-state{ display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:18px; height:100% }
+.no-msg{ color:var(--muted); padding:8px 12px }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1200px) {
+:root { --sidebar-width: 300px; }
+.admin-container { grid-template-columns: var(--sidebar-width) 1fr; }
+.chat-stage { max-width: 980px; padding: 16px; }
+}
+
+/* New behavior: compact persistent sidebar on narrow widths.
+   Desktop (>=900px): full sidebar visible
+   Narrow (<900px): by default the sidebar becomes compact (icons/avatars only)
+   Add .admin-users.show OR .admin-users.expanded (via JS) to expand the full sidebar
+*/
+@media (max-width: 900px) {
+:root { --sidebar-width: 300px; }
+
+/* Default layout: compact left column + content */
+.admin-container {
+grid-template-columns: var(--compact-sidebar) 1fr;
+grid-auto-rows: auto 1fr;
+}
+
+/* compact sidebar appearance */
+.admin-users {
+width: var(--compact-sidebar);
+min-width: var(--compact-sidebar);
+max-width: var(--compact-sidebar);
+padding: 10px 6px;
+border-right: 1px solid rgba(255,255,255,0.08);
+border-radius: 0;
+position: relative;
+height: 100vh;
+overflow-y: auto;
+transform: none !important; /* ensure it's visible in compact mode */
+}
+
+/* When the sidebar is expanded (JS should toggle .expanded or .show) */
+.admin-users.expanded,
+.admin-users.show {
+width: var(--sidebar-width);
+min-width: 220px;
+max-width: var(--sidebar-width);
+padding: 18px;
+position: fixed;
+top: 0;
+left: 0;
+height: 100vh;
+transform: translateX(0);
+box-shadow: 2px 0 20px rgba(2,6,23,0.12);
+z-index: 30;
+}
+
+/* ensure chat occupies full width when compact */
+.chat-stage {
+max-width: 100%;
+padding: 12px;
+height: 100vh;
+}
+
+/* Keep avatar list readable in compact mode: stack items vertically but centered */
+.admin-users.compact,
+.admin-users {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 6px;
+}
+
+/* In compact mode hide text meta but keep avatars visible */
+.admin-users .user-meta,
+.admin-users .user-right {
+display: none;
+}
+
+/* show only avatars as vertical list */
+.admin-users .user-list-item,
+.admin-users .user-item {
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 6px;
+background: transparent;
+border: none;
+box-shadow: none;
+}
+
+/* in expanded mode restore full list appearance */
+.admin-users.expanded .user-list-item,
+.admin-users.show .user-list-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 12px;
+background: rgba(255,255,255,0.4);
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.4);
+}
+
+/* show user-actions as small overlay under avatar in compact */
+.admin-users .user-actions {
+right: auto;
+left: 50%;
+transform: translateX(-50%) translateY(8px);
+top: auto;
+bottom: -6px;
+opacity: 0;
+pointer-events: none;
+}
+
+/* small screens: reveal actions on avatar hover */
+.admin-users .user-list-item:hover .user-actions,
+.admin-users .user-item:hover .user-actions {
+opacity: 1;
+pointer-events: auto;
+transform: translateX(-50%) translateY(0);
+}
+
+/* if the sidebar is expanded, ensure actions are at right */
+.admin-users.expanded .user-actions {
+right: 12px;
+left: auto;
+transform: translateY(-50%) translateX(0);
+top: 50%;
+bottom: auto;
+}
+
+/* accessible back button inside chat header when sidebar expanded on mobile */
+.mobile-back-btn {
+display: flex;
+align-items: center;
+justify-content: center;
+margin-right: 8px;
+width: 34px;
+height: 34px;
+border-radius: 50%;
+background: rgba(0,0,0,0.08);
+cursor: pointer;
+}
+
+/* ensure mobile-only back button hides on desktop */
+@media (min-width: 901px) {
+.mobile-back-btn {
+display: none !important;
+}
+}
+
+}
+
+/* smaller phones */
+@media (max-width: 480px) {
+:root { --gutter: 12px; }
+.adminchat-header { padding: 12px; gap: 10px; }
+.adminchat-header-name { font-size: 15px; }
+.message-input { padding: 12px; font-size: 14px; }
+.send-btn { padding: 8px 12px; font-size: 14px; }
+.bubble-img { max-width: 100%; }
+.messages-inner { max-width: 100%; padding-left: 8px; padding-right: 8px; }
+}
+
+/* Utility helpers */
+.hidden { display: none !important; }
+.center { display:flex; align-items:center; justify-content:center; }
+
+/* Accessibility focus outlines */
+:focus { outline: 3px solid rgba(16,118,214,0.2); outline-offset: 2px; border-radius: 6px; }
+
+/* ==========================================================
+AVATAR ALIGNMENT FIX
+========================================================== */
+
+.bubble-wrapper {
+align-items: flex-end;
+}
+
+.row-user .bubble-wrapper,
+.row-admin .bubble-wrapper {
+align-items: center !important;
+}
+
+.bubble-avatar {
+width: 36px;
+height: 36px;
+border-radius: 50%;
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+/* ==========================================================
+MOBILE BACK BUTTON + SLIDE-IN SIDEBAR (ADDED)
+========================================================== */
+
+/* NOTE:
+   This block preserves slide-in behavior if your JS toggles
+   .admin-users.expanded or .admin-users.show on the sidebar root.
+   In the absence of JS, the sidebar will remain compact but visible
+   (Telegram-like compact column) on narrow widths.
+*/
+
+/* ==========================================================
+MAKE SENDER (ADMIN) MESSAGE TIME VISIBLE
+========================================================== */
+
+.row-admin .bubble-footer,
+.row-admin .bubble-footer * {
+    color: #ffffff !important;
+}
